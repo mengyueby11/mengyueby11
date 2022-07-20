@@ -1,0 +1,15 @@
+delimiter //
+
+DROP PROCEDURE IF EXISTS create_testdata; 
+
+CREATE PROCEDURE create_testdata(IN loop_times INT)  
+BEGIN  
+DECLARE var INT DEFAULT 1;   
+WHILE var<loop_times DO  
+SET var=var+1;  
+INSERT INTO test_001 VALUES (REPLACE(UUID(),"-",""),concat('李',substring(MD5(RAND()),1,2)),'test', date_format(concat( CONCAT(FLOOR(2018 + (RAND() * 1)),'-',LPAD(FLOOR(5 + (RAND() * 7)),2,0),'-',LPAD(FLOOR(1 + (RAND() * 25)),2,0))),'%Y-%m-%d'),RAND()*10000,RAND()*10000,FLOOR(1 +RAND()*800),RAND()*10000,RAND()*100);
+END WHILE;  
+END  //
+
+delimiter; 
+CALL create_testdata(10);

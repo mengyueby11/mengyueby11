@@ -1,0 +1,2 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Thu Jul 07 12:47:50 CST 2022","Thu Jul 07 12:47:51 CST 2022","91","test_case","test_integral","TestIntegralMge","","","test_integral_management"," 获取积分管理 "
