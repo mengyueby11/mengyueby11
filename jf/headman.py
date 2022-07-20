@@ -157,7 +157,7 @@ class database_query:
     def superior_leaders(self,empNo):
         sql="select m.empNo from sys_duty su left join sys_user m on m.dutyId=su.dutyid where su.dutyId in" \
             "(select parentId from sys_duty where dutyId in (select dutyid from sys_user u where u.empno="+str(empNo)+"))"
-        leaders_empNo=self.cursor1(sql)
+        leaders_empNo=self.sql_cursor1(sql)
         if len(leaders_empNo)!=0:
             leaders_empNo=self.list_info(leaders_empNo)[0]
             return leaders_empNo
@@ -292,6 +292,7 @@ class numerical_calculation:
         leaders_empNo=self.database.superior_leaders(empNo)
         id = self.database.points_project("人才输送", Bonus)
         print("------------------未完成部分---------------------------------------------------------------------")
+        print(leaders_empNo)
         print(id)
         return
     # 异动数据核算
@@ -319,6 +320,8 @@ class numerical_calculation:
 if __name__=='__main__':
     numerical_calculation=numerical_calculation()
     Interface_call=Interface_call()
+    numerical_calculation.transaction_superior_leaders("智慧编辑组长",21579)
+    numerical_calculation.database.Close_mysql()
     # empNo_list=[14860,15371,16532]
     # for i in empNo_list:
         # Interface_call.intergral_save(str(i))
@@ -332,7 +335,7 @@ if __name__=='__main__':
     # empNo={20822,18365,17266,16459}
     # for i in empNo:
     #     Interface_call.integralTask_addTask(i,str(i)+"20220718测试任务",472)
-    Interface_call.integralTask_addTask(20859, str(20859) + "20220718测试任务", 472)
+    # Interface_call.integralTask_addTask(20859, str(20859) + "20220718测试任务", 472)
     # # Joggle.integralTask_addTask('14097','14097测试任务11')
     # # for i in empNo_list:
     # #     # 填报积分
@@ -341,4 +344,3 @@ if __name__=='__main__':
     # #     Joggle.integralTask_addTask(i)
     # # for i in range(0,10):
     # #     Joggle.intergral_save("20739")
-    # Joggle.Close_mysql()
