@@ -6,6 +6,7 @@ import requests
 import random
 from dateutil.relativedelta import relativedelta
 import datetime
+import time
 
 
 #数据库查询
@@ -61,17 +62,16 @@ class database_query:
             sum=self.sql_cursor(sql)
             sum=self.list_info(sum)[0]
             return sum
-    #通过名字查询异动数据
-    def transaction_intergral(self,name):
-        sql="select dept_id,apply_integral from tb_integral where apply_item_id=1232 and informant in ('"+name+"')"
+    #通过工号查询指定积分数据
+    def transaction_intergral(self,informant_id,apply_item_id,datetime):
+        sql="select dept_id,apply_integral,created_time from tb_integral where apply_item_id="+str(apply_item_id)+" and informant_id="+str(informant_id)+""
         result=self.sql_cursor(sql)
-        result=self.list_info(result)
-        if len(result)==2:
-            return result
-        else:
-            return 0
+        for i in list(result):
+            time_data=i[2].strftime('%Y-%m-%d %H:%M')
+            if time_data==datetime:
+                result=[i[0],i[1]]
+                return result
     #二级部门查询
-    #通过工号
     def Inquire_department(self,empNo):
         sql="select fullDeptName from sys_department where deptId in (select su.deptId from sys_user su where su.empNo in ("+str(empNo)+"))"
         departmentName=self.sql_cursor1(sql)
@@ -133,6 +133,22 @@ class database_query:
             return (self.list_info(result))[0]
         else:
             return 0
+    #通过工号查询岗位ID
+    def empno_dutyId(self,empno):
+        sql="select dutyId from sys_user where empNo="+str(empno)
+        result=self.sql_cursor(sql)
+        if len(result)!=0:
+            return (self.list_info(result))[0]
+        else:
+            return 0
+    #通过岗位名称查询岗位ID
+    def dutyName_dutyId(self,dutyName):
+        sql="select dutyId from sys_duty where dutyName in ('"+dutyName+"')"
+        result = self.sql_cursor(sql)
+        if len(result) != 0:
+            return (self.list_info(result))[0]
+        else:
+            return 0
     #通过岗位名称查询级别
     def DutyLevel(self,dutyName):
         sql="select title.dutyLevel from sys_duty duty  left join sys_title title on title.titleId=duty.titleId where duty.dutyName in ('"+dutyName+"')"
@@ -153,17 +169,32 @@ class database_query:
             return long_time
         else:
             return 0
+    #通过岗位id查询工号
+    def dutyid_empNo(self,dutyid):
+        sql="select empNo from sys_user where dutyId="+str(dutyid)
+        empno=self.sql_cursor(sql)
+        if len(empno)!=0:
+            empno=self.list_info(empno)[0]
+            return empno
+        else:
+            sql="select empNo from sys_user where empId=(select su.empId from emp_parttimeduty su where su.dutyId="+str(dutyid)+")"
+            empno=self.sql_cursor(sql)
+            if len(empno)!=0:
+                empno=self.list_info(empno)[0]
+                return empno
+            else:
+                print("该岗位（%s）无用户"%dutyid)
+                return 0
     #上级领导查询
     def superior_leaders(self,empNo):
-        sql="select m.empNo from sys_duty su left join sys_user m on m.dutyId=su.dutyid where su.dutyId in" \
-            "(select parentId from sys_duty where dutyId in (select dutyid from sys_user u where u.empno="+str(empNo)+"))"
-        leaders_empNo=self.sql_cursor1(sql)
-        if len(leaders_empNo)!=0:
-            leaders_empNo=self.list_info(leaders_empNo)[0]
-            return leaders_empNo
-        else:
-            return 0
-    #填报积分项的id查询
+        #获取上级领导的岗位ID
+        sql="select parentid from sys_duty where dutyId in (select u.dutyId from sys_user u where u.empno ="+str(empNo) +")"
+        parentid=self.sql_cursor1(sql)
+        if len(parentid) != 0:
+            parentid=self.list_info(parentid)[0]
+            leaders_empno=self.dutyid_empNo(parentid)
+            return leaders_empno
+    #填报积分项的apply_item_id查询
     def points_project(self,category,points=None):
         if points!=None:
           sql="select id from tb_points_project where category in ('"+category+"') and points in ("+str(points)+") and is_delete=0"
@@ -174,6 +205,16 @@ class database_query:
             id=self.list_info(id)[0]
             return id
         else:
+            return 0
+    #通过填报积分项标准查询apply_item_id
+    def Apply_Item_Id(self,standard):
+        sql="select id from tb_points_project where standard in ('"+standard+"') and is_delete=0"
+        apply_item_id=self.sql_cursor(sql)
+        if len(apply_item_id)!=0:
+            apply_item_id=self.list_info(apply_item_id)[0]
+            return apply_item_id
+        else:
+            print("未找到【%s】积分标准"%standard)
             return 0
     #数据库关闭
     def Close_mysql(self):
@@ -194,9 +235,10 @@ class Interface_call:
     def result_info(self, test_01, empNo):
         if test_01['code'] == 0:
             print("工号为%s接口调用成功!" % empNo)
+            return 1
         else:
             print("工号为%s接口调用失败，失败原因：%s" % (empNo, test_01['msg']))
-        return
+            return 0
      # 创建积分任务
     def integralTask_addTask(self, empNo, test_name,taskObjId):
         token = self.Token(empNo)
@@ -250,34 +292,67 @@ class Interface_call:
             self.result_info(test_01, empNo)
         return
     #异动
+    def deptChange(self,empNo,newDutyId,originDutyId):
+        token = self.Token(empNo)
+        test_url = "http://testjf.jtyjy.com"
+        all_url = test_url + '/api/commonIntegral/deptChange?' + token
+        jsondata = {
+            "empNo": empNo,
+            "newDutyId": newDutyId,
+            "originDutyId": originDutyId
+        }
+        try:
+            test_01 = requests.post(url=all_url, json=jsondata, timeout=5).json()
+        except requests.exceptions.ReadTimeout as a:
+            print("工号%s接口调用失败，失败原因：%s" % (empNo, a))
+        else:
+            fag=self.result_info(test_01, empNo)
+        return fag
 
 class numerical_calculation:
     def __init__(self):
         self.database=database_query()
+        self.interface_call=Interface_call()
     # 异动公式计算
     def transaction_data(self, empNo):
+        originDutyId=self.database.empno_dutyId(empNo)
         deptid = self.database.deptId_info(empNo)
-        if deptid != 0:
-            person_transaction = self.database.person_integral(empNo, 4, deptid)
-            departmentName = self.database.Inquire_department(empNo)
-            (before_av, num_before) = self.database.transaction_sum(departmentName)
-            dutyname = input("输入异动后的岗位：\n")
-            fulldeptname = self.database.Inquire_fullDeptName(dutyname)
-            if fulldeptname != 0:
-                (after_av, num_after) = self.database.transaction_sum(fulldeptname)
-                transaction = int(person_transaction) / before_av * after_av
-                print("-------------------------------异动数据打印---------------------------------------\n")
-                print(after_av, before_av)
-                print(
-                        "异动前个人部门积分为:%s\n异动前的部门为:%s\n异动前的部门人数为:%s\n" % (person_transaction, departmentName, num_before))
-                print("异动后个人部门积分为:%s\n异动后的部门为:%s\n异动后的部门人数为:%s\n" % (transaction, fulldeptname, num_after))
-            print("----------------开始核算后台数据库--------------\n")
-            print("--------------个人异动积分核算----------------\n")
-            name=self.database.empno_name(empNo)
-            self.transaction_joggle(name,fulldeptname,transaction)
+        dutyname = input("输入异动后的岗位：\n")
+        newDutyId=self.database.dutyName_dutyId(dutyname)
+        if deptid != 0 and originDutyId!=0 and newDutyId!=0:
+            timedata=time.strftime('%Y-%m-%d %H:%M')
+            print(timedata)
+            # timedata = "2022-07-21 11:46"
+            fag=self.interface_call.deptChange(empNo,newDutyId,originDutyId)
+            # fag=1
+            if fag==1:
+                transaction_reauls=self.transaction_joggle(empNo,timedata)
+                if transaction_reauls!=0:
+                    person_transaction = self.database.person_integral(empNo, 4, deptid)
+                    if person_transaction==None:
+                        person_transaction=0
+                    departmentName = self.database.Inquire_department(empNo)
+                    (before_av, num_before) = self.database.transaction_sum(departmentName)
+                    fulldeptname = self.database.Inquire_fullDeptName(dutyname)
+                    if fulldeptname != 0:
+                        (after_av, num_after) = self.database.transaction_sum(fulldeptname)
+                        if before_av==0 or after_av==0:
+                            transaction=0
+                        else:
+                            transaction = int(person_transaction) / before_av * after_av
+                        print("-------------------------------异动数据打印---------------------------------------\n")
+                        print(
+                                "异动前个人部门积分为:%s\n异动前的部门为:%s\n异动前的部门人数为:%s\n" % (person_transaction, departmentName, num_before))
+                        print("异动后个人部门积分为:%s\n异动后的部门为:%s\n异动后的部门人数为:%s\n" % (transaction, fulldeptname, num_after))
+                        print("----------------开始核算后台数据库--------------\n")
+                        print("--------------个人异动积分核算----------------\n")
+                        self.adjust_accounts(transaction_reauls,fulldeptname,transaction)
+                        print("------------------异动上级领导数据核算-------------------\n")
+                        self.transaction_superior_leaders(dutyname,empNo,timedata)
         else:
-            print("未到工号为%s的员工\n!")
-    def transaction_superior_leaders(self,dutyname,empNo):
+            print("数据查询失败，失败原因：未找到该员工、岗位错误\n!")
+    #异动前上级领导数据核算
+    def transaction_superior_leaders(self,dutyname,empNo,timedata):
         dutylevel=self.database.DutyLevel(dutyname)
         if 300<=dutylevel<301:
             Bonus=200
@@ -287,29 +362,36 @@ class numerical_calculation:
             term=self.database.HireDate(empNo)
             if term<1:
                 print("工号%s员工未满一年且异动岗位为普通员工，上级无积分奖励\n"%empNo)
+                return
             else:
                 Bonus=100
         leaders_empNo=self.database.superior_leaders(empNo)
-        id = self.database.points_project("人才输送", Bonus)
-        print("------------------未完成部分---------------------------------------------------------------------")
-        print(leaders_empNo)
-        print(id)
+        apply_item_id = self.database.points_project("人才输送", Bonus)
+        reslut=self.database.transaction_intergral(leaders_empNo,apply_item_id,timedata)
+        if reslut==None:
+            print("主管数据核算错误，未找到相关积分数据\n")
+        else:
+            print("异动前上级领导数据核算正确！上级领导工号为：%s，公共积分增加%s\n"%(leaders_empNo,reslut[1]))
         return
-    # 异动数据核算
-    def transaction_joggle(self,name,deptname,transaction):
-        reauls=self.database.transaction_intergral(name)
-        print(reauls)
+    # 个人异动数据查询
+    def transaction_joggle(self,empNo,datetime):
+        time.sleep(60)
+        reauls=self.database.transaction_intergral(empNo,1232,datetime)
         if reauls!=0:
             deptid=reauls[0]
             num=round(reauls[1],2)
+            transaction_reauls=[num,deptid]
+            return transaction_reauls
         else:
-            print("未查询到%s异动的数据！"%name)
-            return
-        fulldeptname=self.database.Inquire_deptid(deptid)
-        if fulldeptname==deptname and round(transaction,2)==num:
+            print("未查询到工号%s的异动数据！"%empNo)
+            return 0
+    # 个人异动数据核算
+    def adjust_accounts(self,transaction_reauls,deptname,transaction):
+        fulldeptname=self.database.Inquire_deptid(transaction_reauls[1])
+        if fulldeptname==deptname and round(transaction)==round(transaction_reauls[0]):
             print("后台异动数据核算正确！\n")
         else:
-            print("后台异动数据核算错误！后台查询到数据为：\n异动积分：%s\t"%num)
+            print("后台异动数据核算错误！后台查询到数据为：%s\n实际异动积分：%s\n"%(transaction_reauls[0],round(transaction,2)))
         return
     #获取二级部门名字
     def Split_name(self,fulldeptname):
@@ -319,28 +401,5 @@ class numerical_calculation:
             return fulldeptname
 if __name__=='__main__':
     numerical_calculation=numerical_calculation()
-    Interface_call=Interface_call()
-    numerical_calculation.transaction_superior_leaders("智慧编辑组长",21579)
+    numerical_calculation.transaction_data("17310")
     numerical_calculation.database.Close_mysql()
-    # empNo_list=[14860,15371,16532]
-    # for i in empNo_list:
-        # Interface_call.intergral_save(str(i))
-        # Interface_call.integralTask_addTask(str(i),str(i)+"2207141557")
-    # database.connect_sql()
-    # numerical_calculation.transaction_data("21579")
-    # numerical_calculation.transaction_superior_leaders("智慧编辑组长",21579)
-    # numerical_calculation.transaction_superior_leaders("智慧编辑组长",21579)
-    # # numerical_calculation.database.HireDate("16517")
-    # numerical_calculation.database.Close_mysql()
-    # empNo={20822,18365,17266,16459}
-    # for i in empNo:
-    #     Interface_call.integralTask_addTask(i,str(i)+"20220718测试任务",472)
-    # Interface_call.integralTask_addTask(20859, str(20859) + "20220718测试任务", 472)
-    # # Joggle.integralTask_addTask('14097','14097测试任务11')
-    # # for i in empNo_list:
-    # #     # 填报积分
-    # #     Joggle.intergral_save(i)
-    # #     ##创建积分任务
-    # #     Joggle.integralTask_addTask(i)
-    # # for i in range(0,10):
-    # #     Joggle.intergral_save("20739")
