@@ -8,7 +8,6 @@ from dateutil.relativedelta import relativedelta
 import datetime
 import time
 
-
 #数据库查询
 class database_query:
     def __init__(self):
@@ -73,7 +72,7 @@ class database_query:
                 return result
     #二级部门查询
     def Inquire_department(self,empNo):
-        sql="select fullDeptName from sys_department where deptId in (select su.deptId from sys_user su where su.empNo in ("+str(empNo)+"))"
+        sql="select fullDeptName from sys_department where deptId in (select su.deptId from sys_user su where su.empNo = "+str(empNo)+")"
         departmentName=self.sql_cursor1(sql)
         departmentName=self.list_info(departmentName)[0]
         return departmentName
