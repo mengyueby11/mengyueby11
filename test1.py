@@ -71,6 +71,7 @@ class database_query:
         sql="select api,Post,code from interface where name in ('%s')"
         api=self.Data_Query(sql,name)
         # print(jsondata)
+        # print(api)
         if api!=-1:
             if api[1]==0 and jsondata==None:
                 api=api[0]%arg
@@ -86,6 +87,28 @@ class database_query:
                 api=api[0]%(str(random_value),arg)
                 try:
                     test_01 = requests.post(url=api, json=jsondata, timeout=5).json()
+                except requests.exceptions.ReadTimeout as a:
+                    print("%s接口调用失败，失败原因：%s" % (api, a))
+                    return -1
+                else:
+                    return self.result_info(test_01,api)
+            elif api[1]==1 and jsondata!=None and api[2]==0:
+                api=api[0]%(arg)
+                # print(api)
+                try:
+                    test_01 = requests.post(url=api, json=jsondata, timeout=5).json()
+                except requests.exceptions.ReadTimeout as a:
+                    print("%s接口调用失败，失败原因：%s" % (api, a))
+                    return -1
+                else:
+                    return self.result_info(test_01,api)
+            elif api[1]==0:
+                api = api[0] % (arg)
+                api=api+"&id=%s&isAgree=%s&remark="%(jsondata['id'],jsondata['isAgree'])
+                # print(api)
+                # print(jsondata)
+                try:
+                    test_01 = requests.get(url=api,timeout=5).json()
                 except requests.exceptions.ReadTimeout as a:
                     print("%s接口调用失败，失败原因：%s" % (api, a))
                     return -1
@@ -170,7 +193,7 @@ class Integral_fill:
         respon = self.database.invocation_interface('token', empno)
         if respon!=-1:
             token = respon['data'].split("=")[1]
-            token = 'token' + '=' + token
+            token = 'token' + '=' + str(token)
             return token
     #填报项目
     def Jsondata(self,applyNum,empno,standard):
@@ -223,6 +246,7 @@ class Integral_fill:
             if dutyLevel!=None:
                 return leaders_empno
             print("-----------------------------------上级领导审核----------------------------------------")
+            leaders_empno=str(16217)
             self.Audit(leaders_empno,approval_id)
             return
     #审核积分提报
@@ -269,7 +293,6 @@ class Integral_fill:
 class IntegralTask:
     def __init__(self):
         self.database = database_query()
-
     # 查询Token
     def Token(self, empno):
         respon = self.database.invocation_interface('token', empno)
@@ -277,13 +300,14 @@ class IntegralTask:
             token = respon['data'].split("=")[1]
             token = 'token' + '=' + token
             return token
-    def integralTask_addTask(self,empno,integralDimension,taskObjId,taskObjType):
+    def integralTask_addTask(self,empno,integralDimension):
         nowtime = datetime.datetime.now()
         endDate = nowtime + datetime.timedelta(days=7)
         startDate=nowtime.strftime("%Y-%m-%d")
         endDate=endDate.strftime("%Y-%m-%d")
         random_value = random.randint(10000, 1000000)
-        taskName=str(empno)+"测试任务"+nowtime.strftime("%Y%m%d%H%M%S")+str(random_value)
+        taskName=str(empno)+"测试任务"+nowtime.strftime("%Y%m%d")+str(random_value)
+        taskObjId=self.database.Execution('查询部门ID',*[empno])[0][0]
         jsondata = {
             "deductionIntegral": 100,
             "endDate": endDate,
@@ -295,17 +319,43 @@ class IntegralTask:
             "taskObjList": [
                 {
                     "taskObjId": taskObjId,
-                    "taskObjType": taskObjType
+                    "taskObjType": 1
                 }
             ]
         }
+        # 调用接口
+        token = self.Token(empno)
+        print("--------------------开始新建任务----------------")
+        self.database.invocation_interface('新建积分任务', token, jsondata)
+        print("----------------开始审批流程----------------------")
+        cur_auditor=self.database.Execution('查询任务审批人',*[taskName])
+        print(cur_auditor)
+        if cur_auditor[0][1]==1:
+            self.integralTask_verifyTask(cur_auditor[0][2],cur_auditor[0][0])
+        return
 
+    def integralTask_verifyTask(self,empno,id):
+        # 调用接口
+        token = self.Token(empno)
+        print("--------------------%s审批任务----------------"%empno)
+        jsondata={
+            "id":id,
+            "isAgree":1,
+            "remark":""
+        }
+        self.database.invocation_interface('审核任务', token, jsondata)
+        self.database.Updata_mysql()
+        staus=self.database.Execution('通过任务ID任务状态', *[str(id)])
+        if staus!=-1:
+            if staus[0][0]==1:
+                self.integralTask_verifyTask(staus[0][1],id)
         return
 if __name__ == '__main__':
     # Integral=Integral_fill()
-    # Integral.bulk_operation(1,20048,'韬奋杯全国决赛获奖',3)
+    # Integral.bulk_operation(1, 11723, '韬奋杯全国决赛获奖', 394)
+    # # Integral.bulk_operation(1,20048,'韬奋杯全国决赛获奖',3)
     # Integral.database.Close_mysql()
     integralTask=IntegralTask()
-
-
+    integralTask.integralTask_addTask(11723,4)
+        # time.sleep(1)
     integralTask.database.Close_mysql()
