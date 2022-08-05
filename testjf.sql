@@ -11,7 +11,7 @@
  Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 25/07/2022 18:17:18
+ Date: 01/08/2022 14:17:15
 */
 
 SET NAMES utf8mb4;
@@ -27,7 +27,7 @@ CREATE TABLE `inquire`  (
   `sentence` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `hr` int(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of inquire
@@ -60,6 +60,10 @@ INSERT INTO `inquire` VALUES (26, '查询职务id', 'select titleId from sys_dut
 INSERT INTO `inquire` VALUES (27, '职务id查询级别', 'select dutyLevel from sys_title where titleId=%s', 0);
 INSERT INTO `inquire` VALUES (28, '查询部门信息', 'select deptLevel,fullDeptName,deptId from sys_department where deptId in (select su.deptId from sys_user su where su.empNo=%s)', 1);
 INSERT INTO `inquire` VALUES (29, '通过部门全称查询部门ID', 'select deptid from sys_department where fullDeptName in (%s)', 1);
+INSERT INTO `inquire` VALUES (30, '查询任务审批人', 'select id,`status`,cur_auditor from tb_integral_task where task_name=%s\r\n', 0);
+INSERT INTO `inquire` VALUES (31, '通过任务ID任务状态', 'select `status`,cur_auditor from tb_integral_task where id=%s\r\n', 0);
+INSERT INTO `inquire` VALUES (32, '查询积分审核id接收人和状态', 'select approval_id,reviewer,status from tb_integral where remark=%s and informant_id =%s', 0);
+INSERT INTO `inquire` VALUES (33, '根据工号查询填报的积分', 'select * from tb_integral where remark=%s and informant_id =%s', 0);
 
 -- ----------------------------
 -- Table structure for interface
@@ -72,7 +76,7 @@ CREATE TABLE `interface`  (
   `Post` int(0) NULL DEFAULT NULL,
   `code` int(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of interface
@@ -81,5 +85,10 @@ INSERT INTO `interface` VALUES (1, 'token', 'http://oauth.jtyjy.com/api/oneLogin
 INSERT INTO `interface` VALUES (2, '填报积分', 'http://testjf.jtyjy.com/api/integral/save/%s?%s', 1, 1);
 INSERT INTO `interface` VALUES (3, '审核积分提报', 'http://testjf.jtyjy.com/api/integral/audit/%s?%s', 1, 1);
 INSERT INTO `interface` VALUES (4, '新建积分任务', 'http://testjf.jtyjy.com/api/integralTask/addTask?%s', 1, 0);
+INSERT INTO `interface` VALUES (5, '审核任务', 'http://testjf.jtyjy.com/api/integralTask/verifyTask?%s', 0, 0);
+INSERT INTO `interface` VALUES (6, '获取积分管理列表', '/api/integral/list', 0, 0);
+INSERT INTO `interface` VALUES (9, '积分项目树', '/api/projectTree/projectTree?keyWord=&', 0, 0);
+INSERT INTO `interface` VALUES (10, '积分填报', '/api/integral/save/%s?%s', 1, 1);
+INSERT INTO `interface` VALUES (11, '积分审核', '/api/integral/audit/%s?%s', 1, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

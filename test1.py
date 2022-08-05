@@ -12,22 +12,20 @@ import time
 class database_query:
     #连接数据库
     def __init__(self):
-        self.jtyjy_integral_test = pymysql.connect(host="192.168.2.31", user="mysql", password="123456",
-                                                   db='jtyjy_integral_test')
-        self.hr2020 = pymysql.connect(host="192.168.2.31", user="mysql", password="123456", db='hr2020')
-        self.testjf_sql = pymysql.connect(host="10.96.15.89", user="root", password="123456", db='testjf')
-        self.jtyjy_cur=self.jtyjy_integral_test.cursor()
-        self.hr2020_cur=self.hr2020.cursor()
-        self.testjf_cur=self.testjf_sql.cursor()
+        self.Connect_mysql()
+        self.testjf_url=r"http://testjf.jtyjy.com"
+        self.token_url=r"http://oauth.jtyjy.com"
     #数据查询
     def Data_Query(self,sql,name):
         sql=sql%name
+        # print(sql)
         try:
             self.testjf_cur.execute(sql)
         except Exception as e:
             print('数据库查询失败: %s\n失败原因：%s' % (name, e))
         else:
             sql=self.testjf_cur.fetchall()
+            # print(sql)
             if len(sql)>0:
                 sql=list(chain.from_iterable(sql))
                 return sql
@@ -75,6 +73,12 @@ class database_query:
         if api!=-1:
             if api[1]==0 and jsondata==None:
                 api=api[0]%arg
+                if name=="token":
+                    if self.token_url not in api:
+                        api=self.token_url+api
+                else:
+                    if self.testjf_url in api:
+                        api=self.testjf_url+api
                 try:
                     respon = requests.get(api).json()
                 except requests.exceptions.ReadTimeout as a:
@@ -85,6 +89,8 @@ class database_query:
             elif api[1]==1 and jsondata!=None and api[2]==1:
                 random_value = random.randint(10000, 1000000)
                 api=api[0]%(str(random_value),arg)
+                if self.testjf_url not in api:
+                    api=self.testjf_url+api
                 try:
                     test_01 = requests.post(url=api, json=jsondata, timeout=5).json()
                 except requests.exceptions.ReadTimeout as a:
@@ -94,6 +100,8 @@ class database_query:
                     return self.result_info(test_01,api)
             elif api[1]==1 and jsondata!=None and api[2]==0:
                 api=api[0]%(arg)
+                if self.testjf_url not in api:
+                    api=self.testjf_url+api
                 # print(api)
                 try:
                     test_01 = requests.post(url=api, json=jsondata, timeout=5).json()
@@ -104,9 +112,12 @@ class database_query:
                     return self.result_info(test_01,api)
             elif api[1]==0:
                 api = api[0] % (arg)
-                api=api+"&id=%s&isAgree=%s&remark="%(jsondata['id'],jsondata['isAgree'])
-                # print(api)
-                # print(jsondata)
+                if self.testjf_url not in api:
+                    api=self.testjf_url+api
+                s_api=''
+                for key, value in jsondata.items():
+                    s_api = str(s_api) + "&%s=%s" % (key, value)
+                api=api+s_api
                 try:
                     test_01 = requests.get(url=api,timeout=5).json()
                 except requests.exceptions.ReadTimeout as a:
@@ -125,10 +136,13 @@ class database_query:
     #关闭重新连接
     def Updata_mysql(self):
         self.Close_mysql()
+        self.Connect_mysql()
+    #连接数据库
+    def Connect_mysql(self):
         self.jtyjy_integral_test = pymysql.connect(host="192.168.2.31", user="mysql", password="123456",
                                                    db='jtyjy_integral_test')
         self.hr2020 = pymysql.connect(host="192.168.2.31", user="mysql", password="123456", db='hr2020')
-        self.testjf_sql = pymysql.connect(host="10.96.15.89", user="root", password="123456", db='testjf')
+        self.testjf_sql = pymysql.connect(host="192.168.2.31", user="mysql", password="123456", db='auto_test')
         self.jtyjy_cur = self.jtyjy_integral_test.cursor()
         self.hr2020_cur = self.hr2020.cursor()
         self.testjf_cur = self.testjf_sql.cursor()
@@ -144,22 +158,32 @@ class database_query:
 class Integral_fill:
     def __init__(self):
         self.database = database_query()
-    #单次提报积分流程
-    def Point_Management(self,applyNum,empno,standard):
-        print("------------------提报积分--------------------------")
-        remark=self.Jsondata(applyNum,empno,standard)
+
+    # 查询Token
+    def Token(self, empno):
+        respon = self.database.invocation_interface('token', empno)
+        if respon != -1:
+            token = respon['data'].split("=")[1]
+            token = 'token' + '=' + str(token)
+            return token
+    # 单次提报积分流程
+    def Point_Management(self, applyNum, empno, standard):
+        remark = self.Jsondata(applyNum, empno, standard)
+        print("------------重新连接数据库----------------------------")
         self.database.Updata_mysql()
-        if remark!=None:
-            print("------------------------查询审批编号---------------------")
-            approval_Id=self.Approval_Id(empno,remark)
-            print("----------------------查询职级-----------------------")
-            self.Query_Level(empno,approval_Id)
-        return
-    #批量审核
-    def bulk_operation(self, applyNum, empno, standard, n):
+        if remark != None:
+            approval_Id = self.Approval_Id(empno, remark)
+            reviewer=self.Reviewer(str(approval_Id[0]))
+            if reviewer!=None:
+                print("-----------------开始审批积分------------------------------\n")
+                if reviewer[1]==1 or reviewer[1]==2:
+                    self.Audit(reviewer[0],approval_Id)
+                return
+    #批量提报积分流程
+    def bulk_operation(self, applyNum, empno, standard,n):
         remark_list = []
         approval_Id_list = []
-        print("------------------提报积分--------------------------")
+        print("------------------开始批量提报积分--------------------------")
         for i in range(0, n):
             remark = self.Jsondata(applyNum, empno, standard)
             remark_list.append(remark)
@@ -170,47 +194,30 @@ class Integral_fill:
             approval_Id = self.Approval_Id(empno, i)
             approval_Id_list.append(approval_Id[0])
         print(approval_Id_list)
-        print("-------------------积分员审核------------------------")
-        # Integral.His_supervisor(empno, approval_Id_list)
-        self.Query_Level(empno, approval_Id_list)
-        return
-    #审批流程判断
-    def Query_Level(self,empno,approval_Id):
-        titleId=self.database.Execution('查询职务id',*[str(empno)])[0][0]
-        dutyLevel=self.database.Execution('职务id查询级别',str(titleId))[0][0]
-        if 200<=dutyLevel<301:
-            print("-----------------审核流程：积分员-部门经理/总裁---------------------------")
-            self.Integral_Manager(empno,approval_Id)
-            self.His_supervisor(empno,approval_Id)
-        elif dutyLevel<200:
-            print("-----------------审核流程：主管-积分员-部门经理---------------------------")
-            self.His_supervisor(empno,approval_Id)
-            self.Integral_Manager(empno,approval_Id)
-            leaders_empno=self.His_supervisor(empno,123,dutyLevel)
-            self.His_supervisor(leaders_empno,approval_Id)
-    #查询Token
-    def Token(self,empno):
-        respon = self.database.invocation_interface('token', empno)
-        if respon!=-1:
-            token = respon['data'].split("=")[1]
-            token = 'token' + '=' + str(token)
-            return token
-    #填报项目
-    def Jsondata(self,applyNum,empno,standard):
-        result=self.database.Execution('根据工作标准查询填报项',*[standard])
+
+        reviewer = self.Reviewer(str(approval_Id_list[0]))
+        if reviewer != None:
+            print("-------------------开始批量审核------------------------")
+            if reviewer[1] == 1 or reviewer[1] == 2:
+                self.Audit(reviewer[0], approval_Id_list)
+            return
+    # 填报项目
+    def Jsondata(self, applyNum, empno, standard):
+        print("------------------提报积分--------------------------")
+        result = self.database.Execution('根据工作标准查询填报项', *[standard])
         Time = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
         random_value = random.randint(10000, 1000000)
-        remark=str(empno)+str(Time)+str(random_value)
-        applyIntegral=list(result[0])[0]
-        applyUnit=list(result[0])[1]
-        dimensionId=list(result[0])[2]
-        standardId=list(result[0])[3]
+        remark = str(empno) + str(Time) + str(random_value)
+        applyIntegral = list(result[0])[0]
+        applyUnit = list(result[0])[1]
+        dimensionId = list(result[0])[2]
+        standardId = list(result[0])[3]
         # 查询部门id
-        deptId=self.database.Execution('查询部门ID',*[str(empno)])
-        if deptId!=-1:
+        deptId = self.database.Execution('查询部门ID', *[str(empno)])
+        if deptId != -1:
             deptId = list(chain.from_iterable(deptId))[0]
-            jsondata=[
-            {
+            jsondata = [
+                {
                     "applyIntegral": int(applyIntegral),
                     "applyNum": applyNum,
                     "applyUnit": applyUnit,
@@ -220,37 +227,33 @@ class Integral_fill:
                     "informantId": str(empno),
                     "remark": remark,
                     "standardId": standardId
-            }
-        ]
-            token=self.Token(empno)
-            self.database.invocation_interface('填报积分',token,jsondata)
+                }
+            ]
+            token = self.Token(empno)
+            self.database.invocation_interface('填报积分', token, jsondata)
             # print(remark)
             return remark
         else:
-            print("%s未查询到该用户的岗位ID\n"%empno)
+            print("%s未查询到该用户的岗位ID\n" % empno)
             return
-    #上级审核
-    def His_supervisor(self,empno,approval_id,dutyLevel=None):
-        print("---------------------开始查询上级领导-------------------------")
-        # 上级领导查询
-        parentid =self.database.Execution('查询上级领导的岗位ID',*[str(empno)])
-        if parentid !=-1:
-            parentid =list(chain.from_iterable(parentid))[0]
-            leaders_empno=self.database.Execution('岗位ID查询工号',*[str(parentid)])
-            if leaders_empno==-1:
-                leaders_empno = self.database.Execution('兼职表岗位ID查询工号', *[str(parentid)])
-                if leaders_empno==-1:
-                    print("工号为%s的用户无领导!\n"%empno)
-            leaders_empno=list(chain.from_iterable(leaders_empno))[0]
-            print("----------------查询到的上级领导为:%s---------------------------" % leaders_empno)
-            if dutyLevel!=None:
-                return leaders_empno
-            print("-----------------------------------上级领导审核----------------------------------------")
-            leaders_empno=str(16217)
-            self.Audit(leaders_empno,approval_id)
-            return
+    # 查询审批编号
+    def Approval_Id(self, empno, remark):
+        print("------------------------查询审批编号---------------------")
+        approval_id = self.database.Execution('查询审批编号', *[str(empno), remark])
+        if approval_id != -1:
+            approval_id = list(chain.from_iterable(approval_id))
+            print(approval_id)
+            return approval_id
+    #查询审批人
+    def Reviewer(self,approval_id):
+        # print(approval_id)
+        reviewer=self.database.Execution('查询积分审批人工号',*[approval_id])
+        # print(reviewer)
+        if reviewer!=None:
+            return reviewer[0]
     #审核积分提报
     def Audit(self,empno,approval_id):
+        print("----------------------%s审批---------------------------------\n"%empno)
         # 审批编号处理
         if len(approval_id) > 1:
             integralIds = approval_id[0]
@@ -267,29 +270,13 @@ class Integral_fill:
         #调用接口
         token = self.Token(empno)
         self.database.invocation_interface('审核积分提报', token, jsondata)
-    #积分员审核
-    def Integral_Manager(self,empno,approval_Id):
-        print("------------开始查询积分员----------------------")
-        deptId=self.database.Execution('查询部门信息',*[str(empno)])
-        #判断当前所处部门级别，3级部门往上查询
-        if deptId[0][0]>2:
-            fullDeptName=deptId[0][1].split("-")[0]+"-"+deptId[0][1].split("-")[1]
-            deptId=self.database.Execution('通过部门全称查询部门ID',*[fullDeptName])[0][0]
-        elif deptId[0][0]==2:
-            deptId=deptId[0][2]
-        emp_no=self.database.Execution('查询积分员',*[str(deptId)])[0][0]
-        print("----------------查询到的积分员为:%s---------------------------" % emp_no)
-        print("-----------------------------------积分员审核----------------------------------------")
-        self.Audit(emp_no,approval_Id)
-        return
-        # 查询审批编号
-    #查询审批编号
-    def Approval_Id(self,empno,remark):
-        approval_id=self.database.Execution('查询审批编号',*[str(empno),remark])
-        if approval_id!=-1:
-            approval_id =list(chain.from_iterable(approval_id))
-            print(approval_id)
-            return approval_id
+        self.database.Updata_mysql()
+        reviewer=self.Reviewer(approval_id[0])
+        if reviewer[1]==1 or reviewer[1]==2:
+            return self.Audit(reviewer[0],approval_id)
+        else:
+            return
+#新建任务
 class IntegralTask:
     def __init__(self):
         self.database = database_query()
@@ -300,21 +287,50 @@ class IntegralTask:
             token = respon['data'].split("=")[1]
             token = 'token' + '=' + token
             return token
+    #单次新建积分任务流程检查
     def integralTask_addTask(self,empno,integralDimension):
+        # 调用接口
+        token = self.Token(empno)
+        taskName=self.Create_integralTask(empno,integralDimension,token)
+        print("积分任务名称为：%s"%taskName)
+        self.database.Updata_mysql()
+        cur_auditor=self.database.Execution('查询任务审批人',*[taskName])
+        print(cur_auditor)
+        if cur_auditor[0][1]==1:
+            self.integralTask_verifyTask(cur_auditor[0][2],cur_auditor[0][0])
+        return
+    #批量单次新建积分任务流程检查
+    def list_integralTask_addTask(self,empno,integralDimension,n):
+        taskName_list=[]
+        token = self.Token(empno)
+        for i in range(0,n):
+            taskName=self.Create_integralTask(empno,integralDimension,token)
+            taskName_list.append(taskName)
+        self.database.Updata_mysql()
+        for i in taskName_list:
+            cur_auditor = self.database.Execution('查询任务审批人', *[i])
+            print(cur_auditor)
+            if cur_auditor[0][1] == 1:
+                self.integralTask_verifyTask(cur_auditor[0][2], cur_auditor[0][0])
+        return
+    #创建任务
+    def Create_integralTask(self,empno,integralDimension,token):
+        # token = self.Token(empno)
+        print("--------------------开始新建任务----------------")
         nowtime = datetime.datetime.now()
         endDate = nowtime + datetime.timedelta(days=7)
-        startDate=nowtime.strftime("%Y-%m-%d")
-        endDate=endDate.strftime("%Y-%m-%d")
+        startDate = nowtime.strftime("%Y-%m-%d")
+        endDate = endDate.strftime("%Y-%m-%d")
         random_value = random.randint(10000, 1000000)
-        taskName=str(empno)+"测试任务"+nowtime.strftime("%Y%m%d")+str(random_value)
-        taskObjId=self.database.Execution('查询部门ID',*[empno])[0][0]
+        taskName = str(empno) + "测试任务" + nowtime.strftime("%Y%m%d") + str(random_value)
+        taskObjId = self.database.Execution('查询部门ID', *[empno])[0][0]
         jsondata = {
             "deductionIntegral": 100,
             "endDate": endDate,
             "integralDimension": integralDimension,
             "remark": "",
             "rewardIntegral": 100,
-            "startDate":startDate,
+            "startDate": startDate,
             "taskName": taskName,
             "taskObjList": [
                 {
@@ -323,20 +339,15 @@ class IntegralTask:
                 }
             ]
         }
-        # 调用接口
-        token = self.Token(empno)
-        print("--------------------开始新建任务----------------")
-        self.database.invocation_interface('新建积分任务', token, jsondata)
-        print("----------------开始审批流程----------------------")
-        cur_auditor=self.database.Execution('查询任务审批人',*[taskName])
-        print(cur_auditor)
-        if cur_auditor[0][1]==1:
-            self.integralTask_verifyTask(cur_auditor[0][2],cur_auditor[0][0])
-        return
 
+        reluse=self.database.invocation_interface('新建积分任务', token, jsondata)
+        if reluse!=-1:
+            return taskName
+    #审批任务
     def integralTask_verifyTask(self,empno,id):
         # 调用接口
         token = self.Token(empno)
+        print("----------------开始审批流程----------------------")
         print("--------------------%s审批任务----------------"%empno)
         jsondata={
             "id":id,
@@ -351,11 +362,12 @@ class IntegralTask:
                 self.integralTask_verifyTask(staus[0][1],id)
         return
 if __name__ == '__main__':
-    # Integral=Integral_fill()
+    Integral=Integral_fill()
     # Integral.bulk_operation(1, 11723, '韬奋杯全国决赛获奖', 394)
-    # # Integral.bulk_operation(1,20048,'韬奋杯全国决赛获奖',3)
-    # Integral.database.Close_mysql()
-    integralTask=IntegralTask()
-    integralTask.integralTask_addTask(11723,4)
-        # time.sleep(1)
-    integralTask.database.Close_mysql()
+    Integral.bulk_operation(1,20048,'韬奋杯全国决赛获奖',3)
+    # Integral.Point_Management(1,11723,'韬奋杯全国决赛获奖')
+    Integral.database.Close_mysql()
+    # integralTask=IntegralTask()
+    # # integralTask.list_integralTask_addTask(11881,4,2)
+    # integralTask.integralTask_addTask(11881,4)
+    # integralTask.database.Close_mysql()
