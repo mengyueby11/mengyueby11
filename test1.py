@@ -37,6 +37,7 @@ class database_query:
     def Execution(self,type,*args):
         sql="select sentence,hr from inquire where type in ('%s')"
         sql=self.Data_Query(sql,type)
+        # print(sql)
         if sql!=-1:
             if sql[1]==0:
                 try:
@@ -361,13 +362,68 @@ class IntegralTask:
             if staus[0][0]==1:
                 self.integralTask_verifyTask(staus[0][1],id)
         return
+
+#异动
+class numerical_calculation:
+    def __init__(self):
+        self.database = database_query()
+    # 查询Token
+    def Token(self, empno):
+        respon = self.database.invocation_interface('token', empno)
+        if respon != -1:
+            token = respon['data'].split("=")[1]
+            token = 'token' + '=' + token
+            return token
+    #异动
+    def deptChange(self,empNo,newDutyId,originDutyId):
+        token=self.Token(empNo)
+        jsondata={
+            "empNo": empNo,
+            "newDutyId": newDutyId,
+            "originDutyId": originDutyId
+        }
+        fag=self.database.invocation_interface('部门异动',token,jsondata)
+        return fag
+    #异动执行
+    def transaction(self,empno):
+        #异动前的岗位ID
+        originDutyId=self.database.Execution('查询岗位ID',*[empno])
+        #异动后的岗位ID
+        # dutyname = input("输入异动后的岗位：\n")
+        dutyname='智慧编辑组长'
+        newDutyID=self.database.Execution('岗位名称查询岗位ID',*[dutyname])
+        #判断该岗位是否存在，不存在不执行异动
+        if originDutyId!=-1 and newDutyID!=-1:
+            timedata = time.strftime('%Y-%m-%d %H:%M')
+            print(timedata)
+            #执行异动
+            # fag=self.deptChange(empno,newDutyID,originDutyId)
+            fag=1
+            if fag!=-1:
+                self.transaction_joggle(empno,timedata)
+    #异动数据查询
+    def transaction_joggle(self,empNo,timedata):
+        #更新数据库
+        self.database.Updata_mysql()
+        data_joggle=self.database.Execution('通过工号查询指定积分数据',*[1232,empNo])
+        if data_joggle!=-1:
+            for i in data_joggle:
+                time_data=i[2].strftime('%Y-%m-%d %H:%M')
+                if time_data == timedata:
+                    result = [i[0], i[1]]
+            transaction_reauls = [str(round(result[1],2)), result[0]]
+            print(transaction_reauls)
+            # return transaction_reauls
+
 if __name__ == '__main__':
-    Integral=Integral_fill()
-    # Integral.bulk_operation(1, 11723, '韬奋杯全国决赛获奖', 394)
-    Integral.bulk_operation(1,20048,'韬奋杯全国决赛获奖',3)
-    # Integral.Point_Management(1,11723,'韬奋杯全国决赛获奖')
-    Integral.database.Close_mysql()
-    # integralTask=IntegralTask()
-    # # integralTask.list_integralTask_addTask(11881,4,2)
-    # integralTask.integralTask_addTask(11881,4)
-    # integralTask.database.Close_mysql()
+    # numerical=numerical_calculation()
+    # # numerical.transaction(17310)
+    # numerical.transaction_joggle(21579,'2022-06-27 16:43')
+    # numerical.database.Close_mysql()
+    # Integral=Integral_fill()
+    # Integral.bulk_operation(1,20048,'韬奋杯全国决赛获奖',3)
+    # Integral.database.Close_mysql()
+    integralTask=IntegralTask()
+    # integralTask.list_integralTask_addTask(11881,4,2)
+    integralTask.integralTask_addTask(11881,4)
+    integralTask.database.Close_mysql()

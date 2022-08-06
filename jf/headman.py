@@ -314,9 +314,12 @@ class numerical_calculation:
         self.interface_call=Interface_call()
     # 异动公式计算
     def transaction_data(self, empNo):
+        #异动前的岗位ID
         originDutyId=self.database.empno_dutyId(empNo)
+        #异动前的部门ID
         deptid = self.database.deptId_info(empNo)
         dutyname = input("输入异动后的岗位：\n")
+        #通过岗位名称查询岗位ID
         newDutyId=self.database.dutyName_dutyId(dutyname)
         if deptid != 0 and originDutyId!=0 and newDutyId!=0:
             timedata=time.strftime('%Y-%m-%d %H:%M')

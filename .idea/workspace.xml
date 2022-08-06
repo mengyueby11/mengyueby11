@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d4f19dee-755f-4f1f-864e-22b40d9cf79d" name="Changes" comment="2022/7/26 增加积分任务脚本">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+    <list default="true" id="d4f19dee-755f-4f1f-864e-22b40d9cf79d" name="Changes" comment="提报积分优化、创建任务流程优化">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jf/headman.py" beforeDir="false" afterPath="$PROJECT_DIR$/jf/headman.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test1.py" beforeDir="false" afterPath="$PROJECT_DIR$/test1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testjf.sql" beforeDir="false" afterPath="$PROJECT_DIR$/testjf.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,7 +245,8 @@
       <workItem from="1658800815695" duration="8604000" />
       <workItem from="1659317183275" duration="1816000" />
       <workItem from="1659579007746" duration="7525000" />
-      <workItem from="1659661011457" duration="9847000" />
+      <workItem from="1659661011457" duration="12856000" />
+      <workItem from="1659747280017" duration="16476000" />
     </task>
     <task id="LOCAL-00001" summary="Changes">
       <created>1658297237373</created>
@@ -327,7 +325,14 @@
       <option name="project" value="LOCAL" />
       <updated>1658832699588</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="提报积分优化、创建任务流程优化">
+      <created>1659690600564</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1659690600564</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -359,7 +364,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Changes" />
     <MESSAGE value="2022/7/26 增加积分任务脚本" />
-    <option name="LAST_COMMIT_MESSAGE" value="2022/7/26 增加积分任务脚本" />
+    <MESSAGE value="提报积分优化、创建任务流程优化" />
+    <option name="LAST_COMMIT_MESSAGE" value="提报积分优化、创建任务流程优化" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/pythonProject$.coverage" NAME=" 覆盖结果" MODIFIED="1656655665701" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/finallyMarket/test_case" />
@@ -371,7 +377,7 @@
     <SUITE FILE_PATH="coverage/pythonProject$1.coverage" NAME="1 覆盖结果" MODIFIED="1658459280916" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pythonProject$officer.coverage" NAME="officer 覆盖结果" MODIFIED="1657869402938" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
     <SUITE FILE_PATH="coverage/pythonProject$data.coverage" NAME="data 覆盖结果" MODIFIED="1656657496618" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
-    <SUITE FILE_PATH="coverage/pythonProject$test1.coverage" NAME="test1 覆盖结果" MODIFIED="1659689563122" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pythonProject$test1.coverage" NAME="test1 覆盖结果" MODIFIED="1659778550028" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pythonProject$readCSV.coverage" NAME="readCSV 覆盖结果" MODIFIED="1656655524603" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/finallyMarket/common" />
     <SUITE FILE_PATH="coverage/pythonProject$database.coverage" NAME="database 覆盖结果" MODIFIED="1657179560058" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jifenNew/common" />
     <SUITE FILE_PATH="coverage/pythonProject$token_info__1_.coverage" NAME="token_info (1) 覆盖结果" MODIFIED="1657597785421" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
@@ -382,6 +388,6 @@
     <SUITE FILE_PATH="coverage/pythonProject$mysql_data_jf.coverage" NAME="mysql_data_jf 覆盖结果" MODIFIED="1656667327751" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
     <SUITE FILE_PATH="coverage/pythonProject$gettoken.coverage" NAME="gettoken 覆盖结果" MODIFIED="1657184488764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jifenNew/common" />
     <SUITE FILE_PATH="coverage/pythonProject$main.coverage" NAME="main 覆盖结果" MODIFIED="1659685920750" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/pythonProject$token_info.coverage" NAME="token_info 覆盖结果" MODIFIED="1659663611951" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
+    <SUITE FILE_PATH="coverage/pythonProject$token_info.coverage" NAME="token_info 覆盖结果" MODIFIED="1659777971363" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
   </component>
 </project>
