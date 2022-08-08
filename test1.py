@@ -47,6 +47,7 @@ class database_query:
                 else:
                     print("数据库查询成功\n")
                     result=self.jtyjy_cur.fetchall()
+                    # print(result)
                     if len(result)>0:
                         return result
                     else:
@@ -300,7 +301,7 @@ class IntegralTask:
         if cur_auditor[0][1]==1:
             self.integralTask_verifyTask(cur_auditor[0][2],cur_auditor[0][0])
         return
-    #批量单次新建积分任务流程检查
+    #批量新建积分任务流程检查
     def list_integralTask_addTask(self,empno,integralDimension,n):
         taskName_list=[]
         token = self.Token(empno)
@@ -340,6 +341,21 @@ class IntegralTask:
                 }
             ]
         }
+        # jsondata = {
+        #     "deductionIntegral": 100,
+        #     "endDate": endDate,
+        #     "integralDimension": integralDimension,
+        #     "remark": "",
+        #     "rewardIntegral": 100,
+        #     "startDate": startDate,
+        #     "taskName": taskName,
+        #     "taskObjList": [
+        #         {
+        #             "taskObjId": 11242,
+        #             "taskObjType": 2
+        #         }
+        #     ]
+        # }
 
         reluse=self.database.invocation_interface('新建积分任务', token, jsondata)
         if reluse!=-1:
@@ -394,36 +410,68 @@ class numerical_calculation:
         newDutyID=self.database.Execution('岗位名称查询岗位ID',*[dutyname])
         #判断该岗位是否存在，不存在不执行异动
         if originDutyId!=-1 and newDutyID!=-1:
-            timedata = time.strftime('%Y-%m-%d %H:%M')
+            # timedata = time.strftime('%Y-%m-%d %H:%M')
+            timedata='2022-06-27 16:43'
             print(timedata)
             #执行异动
             # fag=self.deptChange(empno,newDutyID,originDutyId)
             fag=1
             if fag!=-1:
-                self.transaction_joggle(empno,timedata)
+                #移动数据查找
+                transaction_reauls=self.transaction_joggle(empno,timedata)
+                if transaction_reauls!=0:
+                    # 异动前的部门ID
+                    deptid=self.database.Execution('查询部门ID',*[empno])
+                    if deptid!=-1:
+                        person_transaction=self.person_intergral(empno,deptid[0][0])
+                        #二级部门查询
+                        departmentName=self.Inquire_department(empno)
+    def Inquire_department(self,empno):
+        fullDeptName=self.database.Execution('查询所属部门全称',*[empno])
+
+    # 个人部门总积分查询 （2 产值积分 3 公共积分 4 部门积分 1 固定积分）
+    def person_intergral(self,empNo,dutyid=None):
+        sum_list=self.database.Execution('查询个人部门积分的数据',*[empNo,4])
+        if sum_list!=-1:
+            sum=0
+            #计算总分，如果有异动，不计算异动前的数据
+            for i in sum_list:
+                if i[1]!=1232:
+                    if i[-1]==int(dutyid):
+                        sum=sum+round(i[-2],2)
+                else:
+                    return sum
+        else:
+            return 0
     #异动数据查询
     def transaction_joggle(self,empNo,timedata):
         #更新数据库
-        self.database.Updata_mysql()
+        # self.database.Updata_mysql()
         data_joggle=self.database.Execution('通过工号查询指定积分数据',*[1232,empNo])
         if data_joggle!=-1:
             for i in data_joggle:
                 time_data=i[2].strftime('%Y-%m-%d %H:%M')
                 if time_data == timedata:
-                    result = [i[0], i[1]]
-            transaction_reauls = [str(round(result[1],2)), result[0]]
-            print(transaction_reauls)
-            # return transaction_reauls
+                    transaction_reauls = [str(round(i[1],2)), i[0]]
+                    return transaction_reauls
+            print("未查询到工号%s的异动数据！" % empNo)
+            return 0
+        else:
+            print("未查询到工号%s的异动数据！" % empNo)
+            return 0
+    #异动前上级领导数据核算
+    def transaction_superior_leaders(self,dutyname,empNo,timedata):
+        dutylevel=self.database.Execution('岗位名称查询级别',*[dutyname])
 
 if __name__ == '__main__':
-    # numerical=numerical_calculation()
-    # # numerical.transaction(17310)
+    numerical=numerical_calculation()
+    numerical.transaction(21579)
     # numerical.transaction_joggle(21579,'2022-06-27 16:43')
-    # numerical.database.Close_mysql()
+    numerical.database.Close_mysql()
     # Integral=Integral_fill()
     # Integral.bulk_operation(1,20048,'韬奋杯全国决赛获奖',3)
     # Integral.database.Close_mysql()
-    integralTask=IntegralTask()
+    # integralTask=IntegralTask()
     # integralTask.list_integralTask_addTask(11881,4,2)
-    integralTask.integralTask_addTask(11881,4)
-    integralTask.database.Close_mysql()
+    # integralTask.integralTask_addTask(11881,4)
+    # integralTask.database.Close_mysql()
