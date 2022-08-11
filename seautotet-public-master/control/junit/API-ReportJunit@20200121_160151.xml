@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="gbk"?>
+	<testsuites>
+		<testsuite errors="0" failures="1" hostname="seautotest" tests="1" skipped="" name="API" timestamp="2020-01-21T16:01:51.388278" time="0.035907">
+			<testcase name="获取短信验证码并注册" time="0.033912" priority="M">
+				<failure message="testdot:获取验证码功能验证-step:1-element:获取短信验证码-, 断言不通过接口没有此值：presupposition,接口没有此值：smallVipUrl,对比格式通过" type="Failure"/>
+			</testcase>
+		</testsuite>
+	</testsuites>

@@ -404,10 +404,12 @@ class numerical_calculation:
     def transaction(self,empno):
         #异动前的岗位ID
         originDutyId=self.database.Execution('查询岗位ID',*[empno])
+        print(originDutyId)
         #异动后的岗位ID
         # dutyname = input("输入异动后的岗位：\n")
         dutyname='智慧编辑组长'
         newDutyID=self.database.Execution('岗位名称查询岗位ID',*[dutyname])
+        print(newDutyID)
         #判断该岗位是否存在，不存在不执行异动
         if originDutyId!=-1 and newDutyID!=-1:
             # timedata = time.strftime('%Y-%m-%d %H:%M')
@@ -418,15 +420,18 @@ class numerical_calculation:
             fag=1
             if fag!=-1:
                 #移动数据查找
-                transaction_reauls=self.transaction_joggle(empno,timedata)
+                # transaction_reauls=self.transaction_joggle(empno,timedata)
+                transaction_reauls=1
                 if transaction_reauls!=0:
                     # 异动前的部门ID
-                    deptid=self.database.Execution('查询部门ID',*[empno])
+                    # deptid=self.database.Execution('查询部门ID',*[empno])
+                    deptid=1
                     if deptid!=-1:
-                        person_transaction=self.person_intergral(empno,deptid[0][0])
+                        # person_transaction=self.person_intergral(empno,deptid[0][0])
                         #二级部门查询
                         departmentName=self.Inquire_department(empno)
     def Inquire_department(self,empno):
+        print(empno)
         fullDeptName=self.database.Execution('查询所属部门全称',*[empno])
 
     # 个人部门总积分查询 （2 产值积分 3 公共积分 4 部门积分 1 固定积分）
