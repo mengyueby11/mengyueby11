@@ -119,8 +119,22 @@ def suite_format(data):
         #测试数据
         step['_data']=d['data']
         #预期结果
-        step['_ex']
-
+        step['_expected']=d.get('expected','')
+        #输出结果
+        step['_output']=''
+        #测试结果信息
+        step['_resultinfo']=''
+        #添加测试步骤
+        testcase['steps'].append(step)
+        testsuite.append(testcase)
+        #返回处理好的值
+        return  testsuite
+# 判断当前目录是否存在
+def mkdir(p):
+    path=Path(p)
+    # 如果文件不存在 则创建
+    if not path.is_dir():
+        path.mkdir()
 
 if __name__=='__main__':
     file='../element/elements.xlsx'
@@ -132,5 +146,6 @@ if __name__=='__main__':
     test_case='../testcase/testcase.xlsx'
     e_case=Excel('r',test_case)
     re=e_case.read()
-    for c in datatodict(re):
-        print(c)
+    data=datatodict(re)
+    testsuite=suite_format(data)
+    print(testsuite[0]['steps'][0]['data'])
