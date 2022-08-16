@@ -1,3 +1,5 @@
+import operator
+
 from openpyxl import load_workbook
 import pandas as pd
 import xlsxwriter
@@ -135,17 +137,64 @@ def mkdir(p):
     # 如果文件不存在 则创建
     if not path.is_dir():
         path.mkdir()
-
+#获取接口返回值的格式，在httpcaps.py中进行调用
+def compare_key_value(json_p):
+    list_key=[]
+    def getkey_value_all(input_json={}):
+        # isinstance() 函数来判断一个对象是否是一个已知的类型
+        if isinstance(input_json,dict):
+            # keys() 函数以列表返回一个字典所有的键
+            for key in input_json.keys():
+                # get() 函数返回指定键的值，如果值不在字典中返回默认值。
+                key_value=input_json.get(key)
+                if isinstance(key_value,dict):
+                    getkey_value_all(key_value)
+                elif isinstance(key_value,list):
+                    for json_array in key_value:
+                        getkey_value_all(json_array)
+                else:
+                    # 对象类型的key
+                    list_key.append(str(key))
+                    pass
+            # 对象类型的key
+            list_key.append(str(key))
+        elif isinstance(input_json,list):
+            for input_json_arrary in input_json:
+                getkey_value_all(input_json_arrary)
+    getkey_value_all(json_p)
+    return list_key
+#写入token
+def writetoken(token):
+    path=Path('config')/('txt_final.txt')
+    # 写入token和普通常量
+    f=open(path,'a')
+    f.write(token)
+    f.close()
+    return
+# 对比两个json的函数
+def iscompare_json(sub,parent):
+    #将json内容传入获取key值
+    a1=compare_key_value(sub)
+    a2=compare_key_value(parent)
+    #两个key值进行对比
+    flag=operator.eq(a1,a2)
+    # 一致则通过
+    if flag==True:
+        return 'Pass'
+    else:
+        return 'Fail'
 if __name__=='__main__':
-    file='../element/elements.xlsx'
-    e=Excel('r',file)
-    list_read=e.read()
-    ele=element_tojson(list_read)
-    # print(ele['token'])
-
-    test_case='../testcase/testcase.xlsx'
-    e_case=Excel('r',test_case)
-    re=e_case.read()
-    data=datatodict(re)
-    testsuite=suite_format(data)
-    print(testsuite[0]['steps'][0]['data'])
+    # file='../element/elements.xlsx'
+    # e=Excel('r',file)
+    # list_read=e.read()
+    # ele=element_tojson(list_read)
+    #
+    # test_case='../testcase/testcase.xlsx'
+    # e_case=Excel('r',test_case)
+    # re=e_case.read()
+    # data=datatodict(re)
+    # testsuite=suite_format(data)
+    # print(testsuite[0]['steps'][0]['data'])
+    sub = {'phone': '17547817934', 'type': '1'}
+    parent = {'phone': '17547817934', 'sort': '1'}
+    print(iscompare_json(sub, parent))

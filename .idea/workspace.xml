@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d4f19dee-755f-4f1f-864e-22b40d9cf79d" name="Changes" comment="接口自动化">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/seautotest/control/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/seautotest/control/data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/seautotest/control/httpcaps.py" beforeDir="false" afterPath="$PROJECT_DIR$/seautotest/control/httpcaps.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/seautotest/control/log.py" beforeDir="false" afterPath="$PROJECT_DIR$/seautotest/control/log.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/seautotest/control/utlis.py" beforeDir="false" afterPath="$PROJECT_DIR$/seautotest/control/utlis.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -66,7 +64,7 @@
       <recent name="E:\pythonProject\jf" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.log">
+  <component name="RunManager" selected="Python.utlis">
     <configuration name="b" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -201,10 +199,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.utlis" />
         <item itemvalue="Python.log" />
         <item itemvalue="Python.data" />
         <item itemvalue="Python.b" />
-        <item itemvalue="Python.utlis" />
         <item itemvalue="Python.token_info" />
       </list>
     </recent_temporary>
@@ -256,7 +254,7 @@
       <workItem from="1660014315619" duration="2787000" />
       <workItem from="1660205488588" duration="5200000" />
       <workItem from="1660532901282" duration="11655000" />
-      <workItem from="1660612989458" duration="10732000" />
+      <workItem from="1660612989458" duration="15473000" />
     </task>
     <task id="LOCAL-00001" summary="Changes">
       <created>1658297237373</created>
@@ -370,7 +368,14 @@
       <option name="project" value="LOCAL" />
       <updated>1660555725829</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="接口自动化">
+      <created>1660631756577</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1660631756577</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
