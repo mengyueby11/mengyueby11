@@ -1,1 +1,0 @@
-insert into test01 values('6','23');

@@ -1,6 +1,0 @@
-序号,接口名称,接口,
-1,获取token,http://oauth.jtyjy.com/api/oneLogin/sso?serverId=29&empno=16519&pwd=067540,
-2,积分管理,/api/integral/list?page=1&rows=20&deptId=&status=&standard=&dimensionId=&type=&,
-,积分项目树,/api/projectTree/projectTree?keyWord=&,
-,积分填报,/api/integral/save/,"{""applyIntegral"":0,""applyNum"":0,""applyUnit"":"""",""approvalId"":"""",""deptId"":0,""dimensionId"":0,""informantId"":0,""remark"":"""",""standardId"":0}"
-,获取工号信息,http://oauth.jtyjy.com/api/oneLogin/getAndFlush?,
