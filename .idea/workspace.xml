@@ -4,7 +4,7 @@
     <list default="true" id="d4f19dee-755f-4f1f-864e-22b40d9cf79d" name="Changes" comment="接口自动化">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/seautotest/control/httpcaps.py" beforeDir="false" afterPath="$PROJECT_DIR$/seautotest/control/httpcaps.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/seautotest/control/utlis.py" beforeDir="false" afterPath="$PROJECT_DIR$/seautotest/control/utlis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/seautotest/control/log.py" beforeDir="false" afterPath="$PROJECT_DIR$/seautotest/control/log.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,8 +64,8 @@
       <recent name="E:\pythonProject\jf" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.utlis">
-    <configuration name="b" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.httpcaps">
+    <configuration name="htprunn" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -73,12 +73,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/seautotest/lib" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/seautotest" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/seautotest/lib/b.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/seautotest/htprunn.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -87,7 +87,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="data" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="httpcaps" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -100,7 +100,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/seautotest/control/data.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/seautotest/control/httpcaps.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -199,11 +199,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.utlis" />
+        <item itemvalue="Python.httpcaps" />
         <item itemvalue="Python.log" />
-        <item itemvalue="Python.data" />
-        <item itemvalue="Python.b" />
+        <item itemvalue="Python.htprunn" />
         <item itemvalue="Python.token_info" />
+        <item itemvalue="Python.utlis" />
       </list>
     </recent_temporary>
   </component>
@@ -254,7 +254,8 @@
       <workItem from="1660014315619" duration="2787000" />
       <workItem from="1660205488588" duration="5200000" />
       <workItem from="1660532901282" duration="11655000" />
-      <workItem from="1660612989458" duration="15473000" />
+      <workItem from="1660612989458" duration="16490000" />
+      <workItem from="1660702025663" duration="3830000" />
     </task>
     <task id="LOCAL-00001" summary="Changes">
       <created>1658297237373</created>
@@ -375,7 +376,14 @@
       <option name="project" value="LOCAL" />
       <updated>1660631756577</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="接口自动化">
+      <created>1660637438676</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1660637438676</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -413,6 +421,17 @@
     <MESSAGE value="接口自动化" />
     <option name="LAST_COMMIT_MESSAGE" value="接口自动化" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/pythonProject$testindex.coverage" NAME="testindex 覆盖结果" MODIFIED="1658302390528" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/LoadRunner" />
     <SUITE FILE_PATH="coverage/pythonProject$1__1_.coverage" NAME="1 (1) 覆盖结果" MODIFIED="1657867838895" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
@@ -422,22 +441,24 @@
     <SUITE FILE_PATH="coverage/pythonProject$test1.coverage" NAME="test1 覆盖结果" MODIFIED="1660205792020" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pythonProject$data.coverage" NAME="data 覆盖结果" MODIFIED="1660618400395" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/seautotest/control" />
     <SUITE FILE_PATH="coverage/pythonProject$readCSV.coverage" NAME="readCSV 覆盖结果" MODIFIED="1656655524603" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/finallyMarket/common" />
-    <SUITE FILE_PATH="coverage/pythonProject$utlis.coverage" NAME="utlis 覆盖结果" MODIFIED="1660614760271" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/seautotest/control" />
+    <SUITE FILE_PATH="coverage/pythonProject$utlis.coverage" NAME="utlis 覆盖结果" MODIFIED="1660637406156" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/seautotest/control" />
     <SUITE FILE_PATH="coverage/pythonProject$database.coverage" NAME="database 覆盖结果" MODIFIED="1657179560058" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jifenNew/common" />
     <SUITE FILE_PATH="coverage/pythonProject$token_info__1_.coverage" NAME="token_info (1) 覆盖结果" MODIFIED="1657597785421" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
     <SUITE FILE_PATH="coverage/pythonProject$token.coverage" NAME="token 覆盖结果" MODIFIED="1657524111706" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
+    <SUITE FILE_PATH="coverage/pythonProject$htprunn.coverage" NAME="htprunn 覆盖结果" MODIFIED="1660704961839" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/seautotest" />
     <SUITE FILE_PATH="coverage/pythonProject$runalltest_start__1_.coverage" NAME="runalltest_start (1) 覆盖结果" MODIFIED="1658301117874" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jifenNew/run" />
     <SUITE FILE_PATH="coverage/pythonProject$gettoken.coverage" NAME="gettoken 覆盖结果" MODIFIED="1657184488764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jifenNew/common" />
     <SUITE FILE_PATH="coverage/pythonProject$.coverage" NAME=" 覆盖结果" MODIFIED="1656655665701" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/finallyMarket/test_case" />
     <SUITE FILE_PATH="coverage/pythonProject$monitoring.coverage" NAME="monitoring 覆盖结果" MODIFIED="1658281819365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/LoadRunner" />
-    <SUITE FILE_PATH="coverage/pythonProject$log.coverage" NAME="log 覆盖结果" MODIFIED="1660621491087" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/seautotest/control" />
+    <SUITE FILE_PATH="coverage/pythonProject$log.coverage" NAME="log 覆盖结果" MODIFIED="1660705061665" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/seautotest/control" />
     <SUITE FILE_PATH="coverage/pythonProject$officer.coverage" NAME="officer 覆盖结果" MODIFIED="1657869402938" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
     <SUITE FILE_PATH="coverage/pythonProject$b.coverage" NAME="b 覆盖结果" MODIFIED="1660618075058" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/seautotest/lib" />
     <SUITE FILE_PATH="coverage/pythonProject$pytest__test_py__.coverage" NAME="pytest (test.py 内) 覆盖结果" MODIFIED="1660206641443" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytest" />
+    <SUITE FILE_PATH="coverage/pythonProject$httpcaps.coverage" NAME="httpcaps 覆盖结果" MODIFIED="1660705085541" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/seautotest/control" />
     <SUITE FILE_PATH="coverage/pythonProject$runalltest_start.coverage" NAME="runalltest_start 覆盖结果" MODIFIED="1658300202707" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jifenNew/jifenNew/run" />
     <SUITE FILE_PATH="coverage/pythonProject$headman.coverage" NAME="headman 覆盖结果" MODIFIED="1660548173919" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
     <SUITE FILE_PATH="coverage/pythonProject$mysql_data_jf.coverage" NAME="mysql_data_jf 覆盖结果" MODIFIED="1656667327751" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
     <SUITE FILE_PATH="coverage/pythonProject$main.coverage" NAME="main 覆盖结果" MODIFIED="1659685920750" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/pythonProject$token_info.coverage" NAME="token_info 覆盖结果" MODIFIED="1660548184793" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
+    <SUITE FILE_PATH="coverage/pythonProject$token_info.coverage" NAME="token_info 覆盖结果" MODIFIED="1660703175966" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jf" />
   </component>
 </project>
