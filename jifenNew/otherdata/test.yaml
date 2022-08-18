@@ -1,0 +1,7 @@
+-
+  url: http://oauth.jtyjy.com/api/oneLogin/sso
+  data:
+      serverId: 29
+      empno: '20192'
+      pwd: '067540'
+  validate: None
