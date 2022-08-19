@@ -1,0 +1,21 @@
+#积分维度
+type_id={
+        '产值积分':2,
+        '公共积分':3,
+        '部门积分':4,
+        '固定积分':1
+    }
+#token地址
+token_url='http://oauth.jtyjy.com/api/oneLogin/sso'
+#个人数据格式
+users_data= {'serverId': 29, 'empno': '', 'pwd': ''}
+#测试系统地址
+web_address="http://testjf.jtyjy.com"
+#个人信息数据地址
+users_url='http://oauth.jtyjy.com/api/oneLogin/getAndFlush?'
+#填报积分审批
+integral_status={
+    '通过':1,
+    '拒绝':2,
+    '驳回':3
+}

@@ -1,6 +1,6 @@
 import pytest
 from jifenNew.common.readYaml import yamlFile
-from jifenNew.common.gettoken import Token
+from jifenNew.common import general
 
 class Test_token():
     '''
@@ -11,7 +11,9 @@ class Test_token():
     '''
     @pytest.mark.parametrize('users',yamlFile().read_yaml('../otherdata/test.yaml'))
     def test_token(self,users):
-        token=Token().get_token(users['data'],users['url'])
+        users['empno']
+        users=general.Users_Data(users['empno'])
+        token=general.Token().get_token(users, jifenNew.otherdata.data.token_url)
         return token
 
 if __name__=='__main__':
