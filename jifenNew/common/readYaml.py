@@ -10,5 +10,5 @@ class yamlFile():
             #load() :返回一个对象
             value=yaml.load(stream=f,Loader=yaml.FullLoader)
             return value
-# if __name__=='__main__':
-#     yamlFile().read_yaml('../otherdata/test.yaml')
+if __name__=='__main__':
+    yamlFile().read_yaml('../otherdata/interface_general.yaml')

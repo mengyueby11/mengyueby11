@@ -7,7 +7,7 @@ def Token(empNo):
     token = 'token' + '=' + token
     return token
 while True:
-    url="http://testjf.jtyjy.com/mobile/home?"
+    url="http://custopay.jtyjy.com/mobile/?"
     empNo=input("请输入工号：\n")
     if empNo=="T" or empNo=="t":
         break

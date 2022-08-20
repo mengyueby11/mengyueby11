@@ -13,7 +13,7 @@ class Test_token():
     def test_token(self,users):
         users['empno']
         users=general.Users_Data(users['empno'])
-        token=general.Token().get_token(users, jifenNew.otherdata.data.token_url)
+        token=general.Token().get_token(users, general.data.token_url)
         return token
 
 if __name__=='__main__':
