@@ -1,7 +1,5 @@
 import operator
-
 from openpyxl import load_workbook
-import pandas as pd
 import xlsxwriter
 from pathlib import Path
 
