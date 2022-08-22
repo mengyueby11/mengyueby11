@@ -41,24 +41,27 @@ class TestIntegralMag():
             print('---------------查询审核信息-------------------\n')
         # with allure.step('查询提报积分详情'):
             approval_data = tb_integral.integral_approval(empno, remark)
+            assert approval_data != -1
             print("查询审核信息成功")
             numstr='查询审核信息成功,查询到数据为%s'%approval_data
             with allure.step("结果: {}".format(numstr)):
                 pass
-            return empno, remark
-        print(approval_data)
-        assert approval_data != -1
-        print('---------------审核-------------------\n')
-        with allure.step('审核提报积分'):
-            result = tb_integral.integral_audit(approval_data, status)
-        print(result)
-        assert result != -1
-        datas={
-                'empno':empno,
-                'remark':remark,
-                'Integral_jsondata':Integral_jsondata
+            return approval_data,empno, remark
+        print("---------------未完成部分---------------")
+        @allure.step
+        def audit():
+
+            print('---------------审核-------------------\n')
+            with allure.step('审核提报积分'):
+                result = tb_integral.integral_audit(approval_data, status)
+            print(result)
+            assert result != -1
+            datas={
+                    'empno':empno,
+                    'remark':remark,
+                    'Integral_jsondata':Integral_jsondata
             }
-        return datas
+            return datas
     #提报通过
     #标题
     # 子功能
