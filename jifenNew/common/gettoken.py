@@ -4,16 +4,11 @@ import requests
 class Token():
     #获取token
     def get_token(self,datas,url):
-        # self.all_url='http://oauth.jtyjy.com/api/oneLogin/sso'
-        try:
-            respon=requests.get(url,params=datas,timeout=5).json()
-        except Exception as e:
-            print("token接口调用失败，失败原因：%s"%e)
-        else:
-            data=respon['data']
-            #分割token
-            token=data.split('=')[1]
-            return token
+        respon=requests.get(url,params=datas,timeout=5).json()
+        data=respon['data']
+        #分割token
+        token=data.split('=')[1]
+        return token
     #token展示
     def token_way(self,datas,url,way=None):
         if way==1:
@@ -24,16 +19,12 @@ class Token():
     def get_user(self,datas,url_token,users_url):
         # url='http://oauth.jtyjy.com/api/oneLogin/getAndFlush?'
         datas=self.token_way(datas,url_token,1)
-        try:
-            respon=requests.get(users_url,params=datas,timeout=5).json()
-        except Exception as e:
-            print("个人信息接口调用失败，失败原因：%s"%e)
-        else:
-            a=respon['data']
-            user={}
-            for key,value in a.items():
-                if value!=None and value!=-1 and value!=0:
+        respon=requests.get(users_url,params=datas,timeout=5).json()
+        a=respon['data']
+        user={}
+        for key,value in a.items():
+            if value!=None and value!=-1 and value!=0:
                     user[key]=value
-            #断言
-            assert respon['code']==0
-            return user
+        #断言
+        assert respon['code']==0
+        return user

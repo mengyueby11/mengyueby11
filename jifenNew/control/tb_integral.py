@@ -1,13 +1,13 @@
 from jifenNew.common import general
 import time
 import allure
-import pytest
 
 '''获取登录账号的可填报积分项目树'''
 def projectTree(users, type):
     data,url = general.Interface(users, '积分项目树二', {'keyWord': ''})
-    allure.dynamic.testcase(url,'积分项目树二')
+    allure.dynamic.testcase(url)
     assert data!=-1
+    assert data['code'] == 0
     all_data = data['data']
     for i in all_data:
         if i['name'] == type:
@@ -33,7 +33,7 @@ def addIntegral(users, Integraldata,approvalId=None):
         "standardId": str(Integraldata['projectId'])
     }]
     result,url = general.Interface(users, '积分填报', jsondata)
-    allure.dynamic.testcase(url,'积分填报')
+    allure.dynamic.testcase(url)
     assert result!=-1
     return test_user['empno'], remark,jsondata
 '''查询审批信息'''
@@ -63,10 +63,10 @@ def integral_audit(datas, status):
             'remark': '测试接口',
             'status': status}
         result,url = general.Interface(datas['reviewer'], '审核积分提报', jsondata)
-        allure.dynamic.testcase(url,'审核积分提报')
+        allure.dynamic.testcase(url)
         assert result!=-1
         datas = integral_approval(1, 1, datas['approval_id'])
-    return
+    return result
 # 清除积分提报数据
 def intergral_dalete(empno, remak):
     result = general.database_query().ExecutionDel('根据工号清除积分提报数据', *[remak, empno])
@@ -77,7 +77,7 @@ def intergral_dalete(empno, remak):
 def integral_detail(users,empno, remak):
     datas=integral_approval(empno, remak)
     result,url=general.Interface(users,'积分驳回详情',{'id':datas['id']})
-    allure.dynamic.testcase(url,'积分驳回详情')
+    allure.dynamic.testcase(url)
     assert result != -1
     return result['data']
 # if __name__ == "__main__":
