@@ -1,0 +1,27 @@
+-
+  '用例编号': 'test_case1'
+  '所属模块': '积分管理'
+  '用例标题': '根据工号查询该账号可查看积分列表'
+  'severity': 'blocker'
+  'empno': '21899'
+  'datas': {
+    'token': '',
+    'page': '1',
+    'rows': '100',
+    'deptId': '',
+    'status': '',
+    'standard': '',
+    'dimensionId': '',
+    'type': ''
+  }
+  'token':1
+  '接口': '获取积分管理列表1'
+-
+  '用例编号': 'test_case2'
+  '所属模块': '积分管理'
+  '用例标题': '无token查看积分列表'
+  'severity': 'blocker'
+  'empno': '21899'
+  'datas': None
+  'token':0
+  '接口': '获取积分管理列表1'

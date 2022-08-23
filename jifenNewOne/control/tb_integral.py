@@ -1,4 +1,4 @@
-from jifenNew.common import general
+from jifenNewOne.common import general
 import time
 import allure
 

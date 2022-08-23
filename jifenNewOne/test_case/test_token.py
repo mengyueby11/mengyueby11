@@ -1,6 +1,6 @@
 import pytest
-from jifenNew.common.readYaml import yamlFile
-from jifenNew.common import general
+from jifenNewOne.common.readYaml import yamlFile
+from jifenNewOne.common import general
 import allure
 
 @allure.feature('Token')

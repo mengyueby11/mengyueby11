@@ -105,7 +105,7 @@ class database_query:
     def result_info(self, test_01, api):
         print("%s接口调用判断" % api)
         assert test_01['code'] == 0
-        print("接口调用成功!")
+        print("%s接口调用成功!" % api)
         return test_01
 
     # 连接数据库

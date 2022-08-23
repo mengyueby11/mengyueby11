@@ -1,7 +1,7 @@
 import pytest
 import allure
-from jifenNew.common.readYaml import yamlFile
-from jifenNew.control import tb_integral
+from jifenNewOne.common.readYaml import yamlFile
+from jifenNewOne.control import tb_integral
 #模块
 @allure.feature('积分管理')
 
